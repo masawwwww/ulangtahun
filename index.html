@@ -1,1 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Selamat Ulang Tahun, Nabila Sayang ❤️</title>
+  <meta name="description" content="Ucapan ulang tahun singkat dan elegan untuk Nabila Sayang." />
+  <style>
+    :root{--bg:#071028;--card:#0b1220;--muted:#b8c1cc;--accent:#ff6b6b}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;color:#eef2ff;background:linear-gradient(180deg,#071028 0%, #071b2e 60%);}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px}
+    .card{width:100%;max-width:760px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:18px;padding:26px;box-shadow:0 12px 30px rgba(2,6,23,0.6);position:relative;overflow:hidden}
+    header{display:flex;gap:14px;align-items:center;margin-bottom:6px}
+    .avatar{width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,#ff9a9e,#fad0c4);display:flex;align-items:center;justify-content:center;font-weight:700;color:#371b1b;font-size:30px}
+    h1{margin:0;font-size:22px}
+    .subtitle{color:var(--muted);margin:6px 0 18px}
+    .message{font-size:18px;background:transparent;padding:12px;border-radius:10px;margin-bottom:18px;color:#f8fafc}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,#ff6b6b,#ff8e72);color:white}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .gift-link{display:inline-block;margin-top:8px;text-decoration:none;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.03);font-weight:700;color:inherit}
+    .footer{font-size:13px;color:var(--muted);margin-top:14px}
+    @media (max-width:520px){.card{padding:16px}.avatar{width:56px;height:56px;font-size:22px}}
+    /* hide embedded player until used */
+    .video-wrap{display:none;margin-top:12px}
+    .iframe-small{width:1px;height:1px;opacity:0;position:absolute;left:-9999px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="title">
+      <header>
+        <div class="avatar" id="avatar">N</div>
+        <div>
+          <h1 id="title">Selamat Ulang Tahun, Nabila Sayang!</h1>
+          <div class="subtitle">Untukmu — selalu.</div>
+        </div>
+      </header>
 
+      <section>
+        <p class="message" id="mainMessage">Dalam diam aku merayakanmu — selamat ulang tahun.</p>
+
+        <div class="reveal" id="revealArea" style="display:block;">
+          <div><strong>Kejutan:</strong></div>
+          <a id="giftLink" class="gift-link" href="https://hadiah-spesialmu.com" target="_blank" rel="noopener">Buka Hadiah Spesialmu</a>
+        </div>
+      </section>
+
+      <div class="actions" style="margin-top:14px">
+        <button class="btn btn-primary" id="playBtn" aria-label="Putar Lagu Kejutan">Putar Lagu Kejutan</button>
+        <button class="btn btn-outline" id="confettiBtn">Nyalakan Konfeti</button>
+        <button class="btn btn-outline" id="copyBtn">Salin Link Halaman</button>
+      </div>
+
+      <div class="footer" aria-hidden="true">
+        Dari: <strong>Pasanganmu</strong>
+      </div>
+
+      <!-- hidden iframe player (will be attached when user clicks play to allow autoplay) -->
+      <div class="video-wrap" id="videoWrap" aria-hidden="true">
+        <!-- iframe akan diset ketika tombol diklik -->
+      </div>
+
+      <!-- tiny invisible iframe fallback for preloading (keamanan) -->
+      <iframe id="preloadIframe" class="iframe-small" aria-hidden="true"></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Personalization (edit jika perlu)
+    const partnerName = 'Nabila Sayang';
+    const signatureName = 'Pasanganmu';
+    const giftUrl = 'https://hadiah-spesialmu.com';
+    const ytShortId = 'anwvVhMen1I'; // dari https://youtube.com/shorts/anwvVhMen1I
+    const embedBase = 'https://www.youtube.com/embed/';
+
+    // apply personalization
+    document.getElementById('title').textContent = `Selamat Ulang Tahun, ${partnerName}!`;
+    document.getElementById('avatar').textContent = partnerName.charAt(0).toUpperCase();
+    document.getElementById('giftLink').href = giftUrl;
+    document.getElementById('preloadIframe').src = ''; // kosongkan
+
+    // copy page link
+    document.getElementById('copyBtn').addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(location.href);
+        alert('Link halaman disalin ke clipboard!');
+      }catch(e){
+        prompt('Salin link ini:', location.href);
+      }
+    });
+
+    // confetti (simple particles)
+    (function(){
+      const confettiBtn = document.getElementById('confettiBtn');
+      const canvas = document.createElement('canvas');
+      canvas.id = 'confetti';
+      canvas.style.position = 'absolute';
+      canvas.style.left = 0; canvas.style.top = 0; canvas.style.right = 0; canvas.style.bottom = 0;
+      canvas.style.pointerEvents = 'none';
+      document.querySelector('.card').appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      let W=canvas.width=window.innerWidth, H=canvas.height=window.innerHeight;
+      window.addEventListener('resize', ()=>{W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight});
+      function random(min,max){return Math.random()*(max-min)+min}
+      let particles = [];
+      function makeConfetti(){
+        particles = [];
+        for(let i=0;i<140;i++){
+          particles.push({x:random(0,W), y:random(-H,0), r:random(6,12), d:random(10,30), tilt:random(-10,10), color:`hsl(${Math.floor(random(0,360))},70%,60%)`, speed:random(1,4)});
+        }
+        runConfetti();
+      }
+      function runConfetti(){
+        let t=0;
+        const id = setInterval(()=>{
+          ctx.clearRect(0,0,W,H);
+          for(let p of particles){
+            p.y += p.speed; p.tilt += 0.1; p.x += Math.sin(t+p.d)*0.5;
+            ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.tilt*0.02);
+            ctx.fillStyle = p.color; ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
+            ctx.restore();
+          }
+          t += 0.02;
+          if(particles.every(p=>p.y>H+20)){ clearInterval(id); ctx.clearRect(0,0,W,H); }
+        },16);
+      }
+      confettiBtn.addEventListener('click', makeConfetti);
+    })();
+
+    // YouTube embed creation on click to allow playback (bypass autoplay blocks)
+    const playBtn = document.getElementById('playBtn');
+    let playerAdded = false;
+    playBtn.addEventListener('click', ()=>{
+      if(!playerAdded){
+        const wrap = document.getElementById('videoWrap');
+        // set iframe visible (we keep it tiny on top but visible controls)
+        const iframe = document.createElement('iframe');
+        // autoplay=1 will try to play; many browsers require user gesture (we have click) and may still block if not allowed
+        iframe.src = embedBase + ytShortId + '?autoplay=1&controls=1&rel=0&modestbranding=1';
+        iframe.width = '320';
+        iframe.height = '180';
+        iframe.frameBorder = '0';
+        iframe.allow = 'autoplay; encrypted-media';
+        iframe.title = 'Lagu Kejutan';
+        iframe.style.borderRadius = '8px';
+        wrap.style.display = 'block';
+        wrap.appendChild(iframe);
+        playerAdded = true;
+        playBtn.textContent = 'Jeda Lagu';
+      } else {
+        // jika iframe sudah ada, toggle dengan mengganti src
+        const iframe = document.querySelector('#videoWrap iframe');
+        if(!iframe) return;
+        if(iframe.src.includes('autoplay=1')){
+          // pause by removing autoplay param (there's no standard API without YouTube IFrame API); best effort: replace src without autoplay
+          iframe.src = embedBase + ytShortId + '?autoplay=0&controls=1&rel=0&modestbranding=1';
+          playBtn.textContent = 'Putar Lagu Kejutan';
+        } else {
+          iframe.src = embedBase + ytShortId + '?autoplay=1&controls=1&rel=0&modestbranding=1';
+          playBtn.textContent = 'Jeda Lagu';
+        }
+      }
+    });
+
+    // focus first interactive element for accessibility
+    playBtn.focus();
+  </script>
+</body>
+</html>
