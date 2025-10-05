@@ -94,10 +94,12 @@
       }
     });
 
-    // play/pause music
+    // play/pause music + auto-confetti
     const song = document.getElementById('song');
     const playBtn = document.getElementById('playBtn');
     playBtn.addEventListener('click', ()=>{
+      // trigger confetti on play button click
+      try{ makeConfetti(); }catch(e){}
       if(!song.src){ alert('Belum ada lagu terpasang. Jika ingin, tempelkan URL file mp3 publik ke variabel songUrl pada kode.'); return; }
       if(song.paused){ song.play(); playBtn.textContent = 'Jeda Lagu'; } else { song.pause(); playBtn.textContent = 'Putar Lagu Kejutan'; }
     });
